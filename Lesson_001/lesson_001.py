@@ -1,6 +1,7 @@
 # Variables
 ##############################################################################################
 link_to_video = r"https://www.loom.com/share/21b1000ad71b40bea7f086a9aab4a510"
+github = "https://github.com/nestorcolt/smartninja-april-2020"
 
 x = 10
 y = 7
