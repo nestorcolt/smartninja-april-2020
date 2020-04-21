@@ -26,4 +26,8 @@ greeting_message(username="Mitzy")
 
 """
 
+
 ##############################################################################################
+# Another function
+def say_hello_with_return(name):
+    return "Hello {0}!".format(name)
