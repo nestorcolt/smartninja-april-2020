@@ -18,6 +18,9 @@ class GameEngine:
     def __init__(self):
         self.game_data = {"username": None, "date": None, "score": None}
         self.current_statistics = None
+        self.secret_number = random.randint(1, 30)
+        self.player = None
+        self.attempts = 0
 
         # Method calls
         self.init_score_data_structure()
@@ -29,6 +32,9 @@ class GameEngine:
             helpers.save_score(stored_score=data)
 
         self.current_statistics = data
+
+    def get_player_name(self, player_name="JohnDoe"):
+        self.player = player_name
 
     def update_score_data(self, new_data=None):
         self.current_statistics.append(new_data)
@@ -73,46 +79,37 @@ class GameEngine:
                    data["score"],
                    data["date"])
 
-        print("Best player info:\n{}".format(message))
+        output = "Best player info:\n{}".format(message)
+        print(output)
+        return output
 
     def get_real_date_from_string(self, date):
         datetime_object = datetime.datetime.strptime(date, "%b %d %Y %H:%M:%S")
         return datetime_object
 
-    def play_game(self):
-        player = input("Enter your name: ")
-        # secret = random.randint(1, 30)
-        secret = 22
-        attempts = 0
+    def play_game(self, guess):
 
         # Game start
-        while True:
-            guess = int(input("Guess the secret number (between 1 and 30): "))
-            attempts += 1
+        self.attempts += 1
 
-            if guess == secret:
-                time_now = datetime.datetime.now()
-                date = time_now.strftime("%b %d %Y %H:%M:%S")
+        if guess == self.secret_number:
+            time_now = datetime.datetime.now()
+            date = time_now.strftime("%b %d %Y %H:%M:%S")
 
-                self.game_data["username"] = player
-                self.game_data["date"] = date
-                self.game_data["score"] = attempts
+            self.game_data["username"] = self.player
+            self.game_data["date"] = date
+            self.game_data["score"] = self.attempts
 
-                # Save info in disk
-                self.update_score_data(new_data=self.game_data)
+            # Save info in disk
+            self.update_score_data(new_data=self.game_data)
 
-                # Show game statistics
-                self.show_statistics()
-                break
+            # Show game statistics
+            result = self.show_statistics()
+            return result
 
-            elif guess > secret:
-                print("Your guess is not correct... try something smaller")
-            elif guess < secret:
-                print("Your guess is not correct... try something bigger")
-
+        elif guess > self.secret_number:
+            return "Your guess is not correct... try something smaller"
+        elif guess < self.secret_number:
+            return "Your guess is not correct... try something bigger"
 
 ##############################################################################################
-# Test area
-if __name__ == '__main__':
-    engine = GameEngine()
-    engine.play_game()
